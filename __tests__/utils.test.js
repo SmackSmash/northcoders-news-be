@@ -36,6 +36,42 @@ describe('convertTimestampToDate', () => {
   });
 });
 
-xdescribe('formatDataForSQL', () => {
-  it('return a new array when passed one', () => {});
+describe('formatDataForSQL', () => {
+  test('returns an array when called with no arguments', () => {
+    const result = formatDataForSQL();
+    expect(Array.isArray(result)).toBe(true);
+  });
+  test('returns a new array', () => {
+    const format = [];
+    const data = [];
+    const result = formatDataForSQL(format, data);
+    expect(result).not.toBe(format);
+    expect(result).not.toBe(data);
+  });
+  test('does not mutate either array when passed one as the second argument', () => {
+    const format = [];
+    const data = [];
+    const formatCopy = structuredClone(format);
+    const dataCopy = structuredClone(data);
+    formatDataForSQL(format, data);
+    expect(format).toEqual(formatCopy);
+    expect(data).toEqual(dataCopy);
+  });
+  test('returns an array of ordered arrays in the defined format when provided a format array and an unordered array of objects with corresponding keys', () => {
+    const format = ['one', 'two', 'three'];
+    const data1 = [{ three: 3, two: 2, one: 1 }];
+    const data2 = [
+      { three: 3, two: 2, one: 1 },
+      { three: 'apple', one: 'orange', two: 'pineapple' }
+    ];
+    const expected1 = [[1, 2, 3]];
+    const expected2 = [
+      [1, 2, 3],
+      ['orange', 'pineapple', 'apple']
+    ];
+    const result1 = formatDataForSQL(format, data1);
+    const result2 = formatDataForSQL(format, data2);
+    expect(result1).toEqual(expected1);
+    expect(result2).toEqual(expected2);
+  });
 });

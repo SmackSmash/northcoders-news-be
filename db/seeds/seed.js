@@ -54,29 +54,35 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
         );`);
     })
     .then(() => {
+      const columns = ['slug', 'description', 'img_url'];
+
       return db.query(
         format(
-          `INSERT INTO topics (slug, description, img_url)
+          `INSERT INTO topics (${columns})
             VALUES %L;`,
-          formatDataForSQL(['slug', 'description', 'img_url'], topicData)
+          formatDataForSQL(columns, topicData)
         )
       );
     })
     .then(() => {
+      const columns = ['username', 'name', 'avatar_url'];
+
       return db.query(
         format(
-          `INSERT INTO users (username, name, avatar_url)
+          `INSERT INTO users (${columns})
           VALUES %L;`,
-          formatDataForSQL(['username', 'name', 'avatar_url'], userData)
+          formatDataForSQL(columns, userData)
         )
       );
     })
     .then(() => {
+      const columns = ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_img_url'];
+
       return db.query(
         format(
-          `INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url)
+          `INSERT INTO articles (${columns})
           VALUES %L;`,
-          formatDataForSQL(['title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_img_url'], articleData)
+          formatDataForSQL(columns, articleData)
         )
       );
     });
