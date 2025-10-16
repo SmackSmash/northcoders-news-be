@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 const { PGDATABASE } = require('../config/keys');
 
-const db = new Pool();
+const db = new Pool({ database: PGDATABASE });
 
 if (!PGDATABASE) {
   throw new Error('No PGDATABASE configured');
