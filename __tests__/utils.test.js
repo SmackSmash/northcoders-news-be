@@ -1,6 +1,6 @@
-const { convertTimestampToDate } = require('../db/seeds/utils');
+const { convertTimestampToDate, formatDataForSQL } = require('../db/seeds/utils');
 
-xdescribe('convertTimestampToDate', () => {
+describe('convertTimestampToDate', () => {
   test('returns a new object', () => {
     const timestamp = 1557572706232;
     const input = { created_at: timestamp };
@@ -34,4 +34,8 @@ xdescribe('convertTimestampToDate', () => {
     const expected = { key: 'value' };
     expect(result).toEqual(expected);
   });
+});
+
+xdescribe('formatDataForSQL', () => {
+  it('return a new array when passed one', () => {});
 });
