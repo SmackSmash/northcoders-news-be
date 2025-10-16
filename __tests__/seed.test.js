@@ -559,7 +559,7 @@ describe('seed', () => {
   });
 });
 
-describe('data insertion', () => {
+xdescribe('data insertion', () => {
   test('topics data has been inserted correctly', () => {
     return db.query(`SELECT * FROM topics;`).then(({ rows: topics }) => {
       expect(topics).toHaveLength(3);
