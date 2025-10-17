@@ -6,10 +6,11 @@ const seed = ({ topicData, userData, articleData, commentData, emojiData, emojiA
   return db
     .query(`DROP TABLE IF EXISTS comments;`)
     .then(() => {
-      return db.query(`DROP TABLE IF EXISTS user_topics;`);
-    })
-    .then(() => {
-      return db.query(`DROP TABLE IF EXISTS emoji_article_users;`);
+      return Promise.all([
+        db.query(`DROP TABLE IF EXISTS user_topics;`),
+        db.query(`DROP TABLE IF EXISTS user_article_votes;`),
+        db.query(`DROP TABLE IF EXISTS emoji_article_users;`)
+      ]);
     })
     .then(() => {
       return db.query(`DROP TABLE IF EXISTS articles;`);
@@ -89,6 +90,16 @@ const seed = ({ topicData, userData, articleData, commentData, emojiData, emojiA
         topic VARCHAR(100) NOT NULL,
         FOREIGN KEY (topic) REFERENCES topics(slug)
       )`);
+    })
+    .then(() => {
+      return db.query(`CREATE TABLE user_article_votes(
+        user_article_votes_id SERIAL PRIMARY KEY,
+        username VARCHAR(100) NOT NULL,
+        FOREIGN KEY (username) REFERENCES users(username),
+        article_id INT NOT NULL,
+        FOREIGN KEY (article_id) REFERENCES articles(article_id),
+        vote_count INT NOT NULL DEFAULT 0
+        )`);
     })
     .then(() => {
       const columns = ['slug', 'description', 'img_url'];
