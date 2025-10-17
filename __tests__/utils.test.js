@@ -1,4 +1,4 @@
-const { convertTimestampToDate, formatDataForSQL } = require('../db/seeds/utils');
+const { convertTimestampToDate, formatDataForSQL, createLookupObj } = require('../db/seeds/utils');
 
 describe('convertTimestampToDate', () => {
   test('returns a new object', () => {
@@ -36,6 +36,7 @@ describe('convertTimestampToDate', () => {
   });
 });
 
+// TODO: Get 100% test coverage on custom functions
 describe('formatDataForSQL', () => {
   test('returns an array when called with no arguments', () => {
     const result = formatDataForSQL();
@@ -73,5 +74,40 @@ describe('formatDataForSQL', () => {
     const result2 = formatDataForSQL(format, data2);
     expect(result1).toEqual(expected1);
     expect(result2).toEqual(expected2);
+  });
+});
+
+describe('createLookupObj', () => {
+  test('returns an empty object when passed an empty array', () => {
+    const input = [];
+    const output = createLookupObj(input);
+    expect(output).toEqual({});
+  });
+  test('returns an object with a single key value pair when passed an array containing a single object', () => {
+    const arr = [{ name: 'Dan', age: 38 }];
+    const key = 'name';
+    const value = 'age';
+    const expected = { Dan: 38 };
+    const output = createLookupObj(arr, key, value);
+    expect(output).toEqual(expected);
+  });
+  test('returns an object with multiple key value pairs when passed an array containing multiple objects', () => {
+    const arr = [
+      { name: 'Dan', age: 38 },
+      { name: 'Rose', age: 34 }
+    ];
+    const key = 'name';
+    const value = 'age';
+    const expected = { Dan: 38, Rose: 34 };
+    const output = createLookupObj(arr, key, value);
+    expect(output).toEqual(expected);
+  });
+  test('does not mutate the original input', () => {
+    const arr = [{ name: 'Dan', age: 38 }];
+    const arrCopy = structuredClone(arr);
+    const key = 'name';
+    const value = 'age';
+    createLookupObj(arr, key, value);
+    expect(arr).toEqual(arrCopy);
   });
 });

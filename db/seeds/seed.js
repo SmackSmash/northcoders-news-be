@@ -1,6 +1,6 @@
 const format = require('pg-format');
 const db = require('../connection');
-const { formatDataForSQL } = require('./utils');
+const { formatDataForSQL, createLookupObj } = require('./utils');
 
 const seed = ({ topicData, userData, articleData, commentData }) => {
   return db
@@ -9,10 +9,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       return db.query(`DROP TABLE IF EXISTS articles;`);
     })
     .then(() => {
-      return db.query(` DROP TABLE IF EXISTS users;`);
-    })
-    .then(() => {
-      return db.query(`DROP TABLE IF EXISTS topics;`);
+      return Promise.all([db.query(` DROP TABLE IF EXISTS users;`), db.query(`DROP TABLE IF EXISTS topics;`)]);
     })
     .then(() => {
       return db.query(`
@@ -91,17 +88,22 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       );
     })
     .then(({ rows }) => {
-      console.log(rows);
-      // Create lookup obj utility method to convert data for use
+      const lookup = createLookupObj(rows, 'title', 'article_id');
+
+      commentData.forEach(comment => {
+        comment.article_id = lookup[comment.article_title];
+        delete comment.article_title;
+      });
+
       const columns = ['article_id', 'body', 'votes', 'author', 'created_at'];
 
-      // return db.query(
-      //   format(
-      //     `INSERT INTO comments (${columns})
-      //     VALUES %L;`,
-      //     formatDataForSQL(columns, commentData)
-      //   )
-      // );
+      return db.query(
+        format(
+          `INSERT INTO comments (${columns})
+          VALUES %L;`,
+          formatDataForSQL(columns, commentData)
+        )
+      );
     });
 };
 

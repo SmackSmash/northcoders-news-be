@@ -9,4 +9,11 @@ const formatDataForSQL = (format = [], data = []) => {
   });
 };
 
-module.exports = { convertTimestampToDate, formatDataForSQL };
+const createLookupObj = (arr, key, value) => {
+  return arr.reduce((acc, pair) => {
+    acc[pair[key]] = pair[value];
+    return acc;
+  }, {});
+};
+
+module.exports = { convertTimestampToDate, formatDataForSQL, createLookupObj };
