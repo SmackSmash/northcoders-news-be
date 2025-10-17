@@ -618,6 +618,95 @@ describe('seed', () => {
         });
     });
   });
+
+  describe('emoji_article_users table', () => {
+    test('emoji_article_users table exists', () => {
+      return db
+        .query(
+          `SELECT EXISTS (
+            SELECT FROM 
+                information_schema.tables 
+            WHERE 
+                table_name = 'emoji_article_users'
+            );`
+        )
+        .then(({ rows: [{ exists }] }) => {
+          expect(exists).toBe(true);
+        });
+    });
+
+    test('emojis_article_users table has an emoji_article_user_id column as serial', () => {
+      return db
+        .query(
+          `SELECT *
+            FROM information_schema.columns
+            WHERE table_name = 'emoji_article_users'
+            AND column_name = 'emoji_article_user_id';`
+        )
+        .then(({ rows: [column] }) => {
+          expect(column.column_name).toBe('emoji_article_user_id');
+          expect(column.data_type).toBe('integer');
+          expect(column.column_default).toBe("nextval('emoji_article_users_emoji_article_user_id_seq'::regclass)");
+        });
+    });
+
+    test('emoji_article_users table has emoji_article_user_id column as primary key', () => {
+      return db
+        .query(
+          `SELECT column_name
+            FROM information_schema.table_constraints AS tc
+            JOIN information_schema.key_column_usage AS kcu
+            ON tc.constraint_name = kcu.constraint_name
+            WHERE tc.constraint_type = 'PRIMARY KEY'
+            AND tc.table_name = 'emoji_article_users';`
+        )
+        .then(({ rows: [{ column_name }] }) => {
+          expect(column_name).toBe('emoji_article_user_id');
+        });
+    });
+
+    test('emoji_article_users table has emoji_id column as integer', () => {
+      return db
+        .query(
+          `SELECT column_name, data_type, column_default
+            FROM information_schema.columns
+            WHERE table_name = 'emoji_article_users'
+            AND column_name = 'emoji_id';`
+        )
+        .then(({ rows: [column] }) => {
+          expect(column.column_name).toBe('emoji_id');
+          expect(column.data_type).toBe('integer');
+        });
+    });
+
+    test('emoji_article_users table has username column as varying character', () => {
+      return db
+        .query(
+          `SELECT column_name, data_type, column_default
+            FROM information_schema.columns
+            WHERE table_name = 'emoji_article_users'
+            AND column_name = 'username';`
+        )
+        .then(({ rows: [column] }) => {
+          expect(column.column_name).toBe('username');
+          expect(column.data_type).toBe('character varying');
+        });
+    });
+
+    test('emoji_article_users table has article_id column as integer', () => {
+      return db
+        .query(
+          `SELECT column_name, data_type, column_default
+            FROM information_schema.columns
+            WHERE table_name = 'emoji_article_users'
+            AND column_name = 'article_id';`
+        )
+        .then(({ rows: [column] }) => {
+          expect(column.column_name).toBe('article_id');
+          expect(column.data_type).toBe('integer');
+        });
+    });
+  });
 });
 
 describe('data insertion', () => {
@@ -669,6 +758,28 @@ describe('data insertion', () => {
         expect(comment).toHaveProperty('author');
         expect(comment).toHaveProperty('votes');
         expect(comment).toHaveProperty('created_at');
+      });
+    });
+  });
+
+  test('emojis data has been inserted correctly', () => {
+    return db.query(`SELECT * FROM emojis;`).then(({ rows: emojis }) => {
+      expect(emojis).toHaveLength(2);
+      emojis.forEach(emoji => {
+        expect(emoji).toHaveProperty('emoji_id');
+        expect(emoji).toHaveProperty('emoji');
+      });
+    });
+  });
+
+  test('emoji_article_users data has been inserted correctly', () => {
+    return db.query(`SELECT * FROM emoji_article_users;`).then(({ rows: emoji_article_users }) => {
+      expect(emoji_article_users).toHaveLength(1);
+      emoji_article_users.forEach(emoji_article_user => {
+        expect(emoji_article_user).toHaveProperty('emoji_article_user_id');
+        expect(emoji_article_user).toHaveProperty('emoji_id');
+        expect(emoji_article_user).toHaveProperty('username');
+        expect(emoji_article_user).toHaveProperty('article_id');
       });
     });
   });
