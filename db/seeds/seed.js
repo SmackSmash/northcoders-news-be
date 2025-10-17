@@ -33,52 +33,52 @@ const seed = ({
     })
     .then(() => {
       return db.query(`
-          CREATE TABLE topics(
-          slug VARCHAR(100) UNIQUE PRIMARY KEY,
-          description VARCHAR(255) NOT NULL,
-          img_url VARCHAR(1000) NOT NULL
-        );`);
+        CREATE TABLE topics(
+        slug VARCHAR(100) UNIQUE PRIMARY KEY,
+        description VARCHAR(255) NOT NULL,
+        img_url VARCHAR(1000) NOT NULL
+      );`);
     })
     .then(() => {
       return db.query(`
-          CREATE TABLE users(
-          username VARCHAR(100) UNIQUE PRIMARY KEY,
-          name VARCHAR(100) NOT NULL,
-          avatar_url VARCHAR(1000) NOT NULL
-        );`);
+        CREATE TABLE users(
+        username VARCHAR(100) UNIQUE PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        avatar_url VARCHAR(1000) NOT NULL
+      );`);
     })
     .then(() => {
       return db.query(`
-          CREATE TABLE articles(
-          article_id SERIAL PRIMARY KEY,
-          title VARCHAR(255) NOT NULL,
-          topic VARCHAR(100) NOT NULL,
-          FOREIGN KEY (topic) REFERENCES topics(slug),
-          author VARCHAR(100) NOT NULL,
-          FOREIGN KEY (author) REFERENCES users(username),
-          body TEXT NOT NULL,
-          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-          votes INT NOT NULL DEFAULT 0,
-          article_img_url VARCHAR(1000) NOT NULL
-        );`);
+        CREATE TABLE articles(
+        article_id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        topic VARCHAR(100) NOT NULL,
+        FOREIGN KEY (topic) REFERENCES topics(slug),
+        author VARCHAR(100) NOT NULL,
+        FOREIGN KEY (author) REFERENCES users(username),
+        body TEXT NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        votes INT NOT NULL DEFAULT 0,
+        article_img_url VARCHAR(1000) NOT NULL
+      );`);
     })
     .then(() => {
       return db.query(`CREATE TABLE comments(
-          comment_id SERIAL PRIMARY KEY,
-          article_id INT NOT NULL,
-          FOREIGN KEY (article_id) REFERENCES articles(article_id),
-          body TEXT NOT NULL,
-          votes INT NOT NULL DEFAULT 0,
-          author VARCHAR(100) NOT NULL,
-          FOREIGN KEY (author) REFERENCES users(username),
-          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );`);
+        comment_id SERIAL PRIMARY KEY,
+        article_id INT NOT NULL,
+        FOREIGN KEY (article_id) REFERENCES articles(article_id),
+        body TEXT NOT NULL,
+        votes INT NOT NULL DEFAULT 0,
+        author VARCHAR(100) NOT NULL,
+        FOREIGN KEY (author) REFERENCES users(username),
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );`);
     })
     .then(() => {
       return db.query(`CREATE TABLE emojis(
         emoji_id SERIAL PRIMARY KEY,
         emoji CHAR NOT NULL
-        )`);
+      );`);
     })
     .then(() => {
       return db.query(`CREATE TABLE emoji_article_users(
@@ -90,7 +90,7 @@ const seed = ({
         article_id INT NOT NULL,
         FOREIGN KEY (article_id) REFERENCES articles(article_id),
         UNIQUE (emoji_id, username, article_id)
-      )`);
+      );`);
     })
     .then(() => {
       return db.query(`CREATE TABLE user_topics(
@@ -100,7 +100,7 @@ const seed = ({
         topic VARCHAR(100) NOT NULL,
         FOREIGN KEY (topic) REFERENCES topics(slug),
         UNIQUE (username, topic)
-      )`);
+      );`);
     })
     .then(() => {
       return db.query(`CREATE TABLE user_article_votes(
@@ -111,37 +111,24 @@ const seed = ({
         FOREIGN KEY (article_id) REFERENCES articles(article_id),
         vote_count INT NOT NULL DEFAULT 0,
         UNIQUE (username, article_id, vote_count)
-        )`);
+      );`);
     })
     .then(() => {
       const columns = ['slug', 'description', 'img_url'];
 
-      return db.query(
-        format(
-          `INSERT INTO topics (${columns})
-            VALUES %L;`,
-          formatDataForSQL(columns, topicData)
-        )
-      );
+      return db.query(format(`INSERT INTO topics (${columns}) VALUES %L;`, formatDataForSQL(columns, topicData)));
     })
     .then(() => {
       const columns = ['username', 'name', 'avatar_url'];
 
-      return db.query(
-        format(
-          `INSERT INTO users (${columns})
-          VALUES %L;`,
-          formatDataForSQL(columns, userData)
-        )
-      );
+      return db.query(format(`INSERT INTO users (${columns}) VALUES %L;`, formatDataForSQL(columns, userData)));
     })
     .then(() => {
       const columns = ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_img_url'];
 
       return db.query(
         format(
-          `INSERT INTO articles (${columns})
-          VALUES %L RETURNING article_id, title;`,
+          `INSERT INTO articles (${columns}) VALUES %L RETURNING article_id, title;`,
           formatDataForSQL(columns, articleData)
         )
       );
@@ -156,32 +143,19 @@ const seed = ({
 
       const columns = ['article_id', 'body', 'votes', 'author', 'created_at'];
 
-      return db.query(
-        format(
-          `INSERT INTO comments (${columns})
-          VALUES %L;`,
-          formatDataForSQL(columns, commentData)
-        )
-      );
+      return db.query(format(`INSERT INTO comments (${columns}) VALUES %L;`, formatDataForSQL(columns, commentData)));
     })
     .then(() => {
       const columns = ['emoji'];
 
-      return db.query(
-        format(
-          `INSERT INTO emojis (${columns})
-          VALUES %L;`,
-          formatDataForSQL(columns, emojiData)
-        )
-      );
+      return db.query(format(`INSERT INTO emojis (${columns}) VALUES %L;`, formatDataForSQL(columns, emojiData)));
     })
     .then(() => {
       const columns = ['emoji_id', 'username', 'article_id'];
 
       return db.query(
         format(
-          `INSERT INTO emoji_article_users (${columns})
-          VALUES %L;`,
+          `INSERT INTO emoji_article_users (${columns}) VALUES %L;`,
           formatDataForSQL(columns, emojiArticleUserData)
         )
       );
@@ -190,22 +164,14 @@ const seed = ({
       const columns = ['username', 'topic'];
 
       return db.query(
-        format(
-          `INSERT INTO user_topics (${columns})
-          VALUES %L;`,
-          formatDataForSQL(columns, userTopicData)
-        )
+        format(`INSERT INTO user_topics (${columns}) VALUES %L;`, formatDataForSQL(columns, userTopicData))
       );
     })
     .then(() => {
       const columns = ['username', 'article_id', 'vote_count'];
 
       return db.query(
-        format(
-          `INSERT INTO user_article_votes (${columns})
-          VALUES %L;`,
-          formatDataForSQL(columns, userArticleVoteData)
-        )
+        format(`INSERT INTO user_article_votes (${columns}) VALUES %L;`, formatDataForSQL(columns, userArticleVoteData))
       );
     })
     .then(() => {
