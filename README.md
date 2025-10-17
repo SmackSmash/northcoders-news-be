@@ -33,3 +33,7 @@ module.exports = {
   PGDATABASE: 'nc_news_test'
 };
 ```
+
+## DB Structure
+
+An ERD for this project can be found [here](https://dbdiagram.io/d/nc_news-68f21de92e68d21b41f6ff06).
