@@ -5,9 +5,7 @@ const convertTimestampToDate = ({ created_at, ...otherProperties }) => {
 
 const formatDataForSQL = (format = [], data = []) => {
   return data.map(item => {
-    return format.map(key => {
-      return key === 'created_at' ? convertTimestampToDate({ created_at: item[key] }).created_at : item[key];
-    });
+    return format.map(key => convertTimestampToDate(item)[key]);
   });
 };
 

@@ -4,12 +4,16 @@ const { formatDataForSQL } = require('./utils');
 
 const seed = ({ topicData, userData, articleData, commentData }) => {
   return db
-    .query(
-      `DROP TABLE IF EXISTS comments;
-        DROP TABLE IF EXISTS articles;
-        DROP TABLE IF EXISTS users;
-        DROP TABLE IF EXISTS topics;`
-    )
+    .query(`DROP TABLE IF EXISTS comments;`)
+    .then(() => {
+      return db.query(`DROP TABLE IF EXISTS articles;`);
+    })
+    .then(() => {
+      return db.query(` DROP TABLE IF EXISTS users;`);
+    })
+    .then(() => {
+      return db.query(`DROP TABLE IF EXISTS topics;`);
+    })
     .then(() => {
       return db.query(`
           CREATE TABLE topics(
@@ -81,10 +85,23 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       return db.query(
         format(
           `INSERT INTO articles (${columns})
-          VALUES %L;`,
+          VALUES %L RETURNING article_id, title;`,
           formatDataForSQL(columns, articleData)
         )
       );
+    })
+    .then(({ rows }) => {
+      console.log(rows);
+      // Create lookup obj utility method to convert data for use
+      const columns = ['article_id', 'body', 'votes', 'author', 'created_at'];
+
+      // return db.query(
+      //   format(
+      //     `INSERT INTO comments (${columns})
+      //     VALUES %L;`,
+      //     formatDataForSQL(columns, commentData)
+      //   )
+      // );
     });
 };
 
