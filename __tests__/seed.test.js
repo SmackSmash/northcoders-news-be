@@ -958,4 +958,16 @@ describe('data insertion', () => {
       });
     });
   });
+
+  test('user_article_votes data has been inserted correctly', () => {
+    return db.query(`SELECT * FROM user_article_votes;`).then(({ rows: user_article_votes }) => {
+      expect(user_article_votes).toHaveLength(1);
+      user_article_votes.forEach(user_article_vote => {
+        expect(user_article_vote).toHaveProperty('user_article_votes_id');
+        expect(user_article_vote).toHaveProperty('username');
+        expect(user_article_vote).toHaveProperty('article_id');
+        expect(user_article_vote).toHaveProperty('vote_count');
+      });
+    });
+  });
 });
