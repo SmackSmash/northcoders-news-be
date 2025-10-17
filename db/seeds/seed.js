@@ -6,10 +6,10 @@ const seed = ({ topicData, userData, articleData, commentData, emojiData }) => {
   return db
     .query(`DROP TABLE IF EXISTS comments;`)
     .then(() => {
-      return db.query(`DROP TABLE IF EXISTS articles;`);
+      return db.query(`DROP TABLE IF EXISTS emoji_article_user;`);
     })
     .then(() => {
-      return db.query(`DROP TABLE IF EXISTS emoji_article_user;;`);
+      return db.query(`DROP TABLE IF EXISTS articles;`);
     })
     .then(() => {
       return Promise.all([
