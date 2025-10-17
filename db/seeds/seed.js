@@ -104,6 +104,13 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
           formatDataForSQL(columns, commentData)
         )
       );
+    })
+    .finally(() => {
+      console.log(
+        `🌱 ${
+          process.env.NODE_ENV.charAt(0).toUpperCase() + process.env.NODE_ENV.slice(1)
+        } database seeded successfully`
+      );
     });
 };
 
