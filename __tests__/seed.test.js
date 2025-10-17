@@ -707,6 +707,81 @@ describe('seed', () => {
         });
     });
   });
+
+  describe('user_topics table', () => {
+    test('user_topics table exists', () => {
+      return db
+        .query(
+          `SELECT EXISTS (
+            SELECT FROM 
+                information_schema.tables 
+            WHERE 
+                table_name = 'user_topics'
+            );`
+        )
+        .then(({ rows: [{ exists }] }) => {
+          expect(exists).toBe(true);
+        });
+    });
+
+    test('user_topics table has an user_topic_id column as serial', () => {
+      return db
+        .query(
+          `SELECT *
+            FROM information_schema.columns
+            WHERE table_name = 'user_topics'
+            AND column_name = 'user_topic_id';`
+        )
+        .then(({ rows: [column] }) => {
+          expect(column.column_name).toBe('user_topic_id');
+          expect(column.data_type).toBe('integer');
+          expect(column.column_default).toBe("nextval('user_topics_user_topic_id_seq'::regclass)");
+        });
+    });
+
+    test('user_topics table has user_topic_id column as primary key', () => {
+      return db
+        .query(
+          `SELECT column_name
+            FROM information_schema.table_constraints AS tc
+            JOIN information_schema.key_column_usage AS kcu
+            ON tc.constraint_name = kcu.constraint_name
+            WHERE tc.constraint_type = 'PRIMARY KEY'
+            AND tc.table_name = 'user_topics';`
+        )
+        .then(({ rows: [{ column_name }] }) => {
+          expect(column_name).toBe('user_topic_id');
+        });
+    });
+
+    test('user_topics table has username column as varying character', () => {
+      return db
+        .query(
+          `SELECT column_name, data_type, column_default
+            FROM information_schema.columns
+            WHERE table_name = 'user_topics'
+            AND column_name = 'username';`
+        )
+        .then(({ rows: [column] }) => {
+          expect(column.column_name).toBe('username');
+          expect(column.data_type).toBe('character varying');
+        });
+    });
+
+    test('user_topics table has topic column as varying character', () => {
+      return db
+        .query(
+          `SELECT column_name, data_type, column_default
+            FROM information_schema.columns
+            WHERE table_name = 'user_topics'
+            AND column_name = 'topic';`
+        )
+        .then(({ rows: [column] }) => {
+          expect(column.column_name).toBe('topic');
+          expect(column.data_type).toBe('character varying');
+        });
+    });
+  });
 });
 
 describe('data insertion', () => {

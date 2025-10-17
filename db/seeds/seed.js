@@ -6,6 +6,9 @@ const seed = ({ topicData, userData, articleData, commentData, emojiData, emojiA
   return db
     .query(`DROP TABLE IF EXISTS comments;`)
     .then(() => {
+      return db.query(`DROP TABLE IF EXISTS user_topics;`);
+    })
+    .then(() => {
       return db.query(`DROP TABLE IF EXISTS emoji_article_users;`);
     })
     .then(() => {
@@ -76,6 +79,15 @@ const seed = ({ topicData, userData, articleData, commentData, emojiData, emojiA
         FOREIGN KEY (username) REFERENCES users(username),
         article_id INT NOT NULL,
         FOREIGN KEY (article_id) REFERENCES articles(article_id)
+      )`);
+    })
+    .then(() => {
+      return db.query(`CREATE TABLE user_topics(
+        user_topic_id SERIAL PRIMARY KEY,
+        username VARCHAR(100) NOT NULL,
+        FOREIGN KEY (username) REFERENCES users(username),
+        topic VARCHAR(100) NOT NULL,
+        FOREIGN KEY (topic) REFERENCES topics(slug)
       )`);
     })
     .then(() => {
@@ -151,13 +163,14 @@ const seed = ({ topicData, userData, articleData, commentData, emojiData, emojiA
         )
       );
     })
-    .finally(() => {
+    .then(() => {
       console.log(
         `🌱 ${
           process.env.NODE_ENV.charAt(0).toUpperCase() + process.env.NODE_ENV.slice(1)
         } database seeded successfully`
       );
-    });
+    })
+    .catch(error => console.error(error.message));
 };
 
 module.exports = seed;
