@@ -88,7 +88,8 @@ const seed = ({
         username VARCHAR(100) NOT NULL,
         FOREIGN KEY (username) REFERENCES users(username),
         article_id INT NOT NULL,
-        FOREIGN KEY (article_id) REFERENCES articles(article_id)
+        FOREIGN KEY (article_id) REFERENCES articles(article_id),
+        UNIQUE (emoji_id, username, article_id)
       )`);
     })
     .then(() => {
@@ -97,7 +98,8 @@ const seed = ({
         username VARCHAR(100) NOT NULL,
         FOREIGN KEY (username) REFERENCES users(username),
         topic VARCHAR(100) NOT NULL,
-        FOREIGN KEY (topic) REFERENCES topics(slug)
+        FOREIGN KEY (topic) REFERENCES topics(slug),
+        UNIQUE (username, topic)
       )`);
     })
     .then(() => {
@@ -107,7 +109,8 @@ const seed = ({
         FOREIGN KEY (username) REFERENCES users(username),
         article_id INT NOT NULL,
         FOREIGN KEY (article_id) REFERENCES articles(article_id),
-        vote_count INT NOT NULL DEFAULT 0
+        vote_count INT NOT NULL DEFAULT 0,
+        UNIQUE (username, article_id, vote_count)
         )`);
     })
     .then(() => {
