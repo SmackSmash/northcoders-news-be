@@ -858,4 +858,15 @@ describe('data insertion', () => {
       });
     });
   });
+
+  test('user_topics data has been inserted correctly', () => {
+    return db.query(`SELECT * FROM user_topics;`).then(({ rows: user_topics }) => {
+      expect(user_topics).toHaveLength(1);
+      user_topics.forEach(user_topic => {
+        expect(user_topic).toHaveProperty('user_topic_id');
+        expect(user_topic).toHaveProperty('username');
+        expect(user_topic).toHaveProperty('topic');
+      });
+    });
+  });
 });

@@ -2,7 +2,7 @@ const format = require('pg-format');
 const db = require('../connection');
 const { formatDataForSQL, createLookupObj } = require('./utils');
 
-const seed = ({ topicData, userData, articleData, commentData, emojiData, emojiArticleUserData }) => {
+const seed = ({ topicData, userData, articleData, commentData, emojiData, emojiArticleUserData, userTopicData }) => {
   return db
     .query(`DROP TABLE IF EXISTS comments;`)
     .then(() => {
@@ -160,6 +160,17 @@ const seed = ({ topicData, userData, articleData, commentData, emojiData, emojiA
           `INSERT INTO emoji_article_users (${columns})
           VALUES %L;`,
           formatDataForSQL(columns, emojiArticleUserData)
+        )
+      );
+    })
+    .then(() => {
+      const columns = ['username', 'topic'];
+
+      return db.query(
+        format(
+          `INSERT INTO user_topics (${columns})
+          VALUES %L;`,
+          formatDataForSQL(columns, userTopicData)
         )
       );
     })
