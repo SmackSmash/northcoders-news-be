@@ -4,8 +4,9 @@ const convertTimestampToDate = ({ created_at, ...otherProperties }) => {
 };
 
 const formatDataForSQL = (format = [], data = []) => {
-  return data.map(item => {
-    return format.map(key => convertTimestampToDate(item)[key]);
+  return data.map(obj => {
+    const objWithDates = convertTimestampToDate(obj);
+    return format.map(key => objWithDates[key]);
   });
 };
 
