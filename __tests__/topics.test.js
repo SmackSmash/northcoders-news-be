@@ -7,8 +7,8 @@ const app = require('../app');
 beforeAll(() => seed(data));
 afterAll(() => db.end());
 
-describe('/api/topics', () => {
-  test('GET /', () => {
+describe('GET /', () => {
+  it('retreives an array of topics with the correct data', () => {
     return request(app)
       .get('/api/topics')
       .expect(200)
@@ -25,28 +25,6 @@ describe('/api/topics', () => {
           expect(typeof description).toBe('string');
           expect(typeof img_url).toBe('string');
         });
-      });
-  });
-});
-
-describe('/api/articles', () => {
-  test('GET /', () => {
-    return request(app)
-      .get('/api/articles')
-      .expect(200)
-      .then(res => {
-        const articles = res.body.articles;
-
-        expect(Array.isArray(articles)).toBe(true);
-        expect(articles.length).toBeGreaterThan(0);
-
-        // topics.forEach(topic => {
-        //   const { slug, description, img_url } = topic;
-
-        //   expect(typeof slug).toBe('string');
-        //   expect(typeof description).toBe('string');
-        //   expect(typeof img_url).toBe('string');
-        // });
       });
   });
 });

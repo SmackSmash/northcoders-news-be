@@ -1,0 +1,49 @@
+const request = require('supertest');
+const db = require('../db/connection');
+const seed = require('../db/seeds/seed');
+const data = require('../db/data/test-data');
+const app = require('../app');
+
+beforeAll(() => seed(data));
+afterAll(() => db.end());
+
+describe('GET /', () => {
+  it('retreives an array of articles with the correct data', () => {
+    return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(res => {
+        const articles = res.body.articles;
+
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles.length).toBeGreaterThan(0);
+
+        articles.forEach(article => {
+          const { article_id, title, topic, author, created_at, votes, article_img_url, comment_count } = article;
+
+          expect(typeof article_id).toBe('number');
+          expect(typeof title).toBe('string');
+          expect(typeof topic).toBe('string');
+          expect(typeof author).toBe('string');
+          expect(typeof created_at).toBe('string');
+          expect(typeof votes).toBe('number');
+          expect(typeof article_img_url).toBe('string');
+          expect(typeof comment_count).toBe('number');
+        });
+      });
+  });
+  it('retreives an array of articles in descending date order', () => {
+    return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(res => {
+        const articles = res.body.articles;
+
+        articles.forEach((article, index) => {
+          if (index > 0) {
+            expect(Date.parse(article.created_at)).toBeLessThanOrEqual(Date.parse(articles[index - 1].created_at));
+          }
+        });
+      });
+  });
+});
