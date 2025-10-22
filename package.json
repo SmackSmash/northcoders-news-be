@@ -8,7 +8,7 @@
     "seed-dev": "node ./db/seeds/run-seed.js",
     "test": "jest --runInBand",
     "prepare": "husky install",
-    "start": "node listen.js",
+    "start": "nodemon listen.js",
     "test-seed": "jest seed.test.js"
   },
   "repository": {
@@ -25,7 +25,9 @@
   "devDependencies": {
     "husky": "^9.1.7",
     "jest": "^30.2.0",
-    "jest-extended": "^6.0.0"
+    "jest-extended": "^6.0.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4"
   },
   "dependencies": {
     "dotenv": "^17.2.3",
