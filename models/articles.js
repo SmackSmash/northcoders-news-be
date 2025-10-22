@@ -16,3 +16,13 @@ exports.readAllArticles = async () => {
     return error;
   }
 };
+
+exports.readArticleById = async articleId => {
+  try {
+    const response = await db.query(`SELECT * FROM articles WHERE article_id = $1`, [articleId]);
+    const article = response.rows[0];
+    return article;
+  } catch (error) {
+    return error;
+  }
+};
