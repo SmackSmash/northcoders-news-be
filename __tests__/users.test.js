@@ -13,15 +13,18 @@ describe('GET /', () => {
       .get('/api/users')
       .expect(200)
       .then(res => {
-        // const topics = res.body.topics;
-        // expect(Array.isArray(topics)).toBe(true);
-        // expect(topics.length).toBeGreaterThan(0);
-        // topics.forEach(topic => {
-        //   const { slug, description, img_url } = topic;
-        //   expect(typeof slug).toBe('string');
-        //   expect(typeof description).toBe('string');
-        //   expect(typeof img_url).toBe('string');
-        // });
+        const users = res.body.users;
+
+        expect(Array.isArray(users)).toBe(true);
+        expect(users.length).toBeGreaterThan(0);
+
+        users.forEach(user => {
+          const { username, name, avatar_url } = user;
+
+          expect(typeof username).toBe('string');
+          expect(typeof name).toBe('string');
+          expect(typeof avatar_url).toBe('string');
+        });
       });
   });
 });
