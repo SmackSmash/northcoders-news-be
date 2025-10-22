@@ -19,12 +19,13 @@ describe('GET /', () => {
         expect(articles.length).toBeGreaterThan(0);
 
         articles.forEach(article => {
-          const { article_id, title, topic, author, created_at, votes, article_img_url, comment_count } = article;
+          const { article_id, title, topic, body, author, created_at, votes, article_img_url, comment_count } = article;
 
           expect(typeof article_id).toBe('number');
           expect(typeof title).toBe('string');
           expect(typeof topic).toBe('string');
           expect(typeof author).toBe('string');
+          expect(body).toBe(undefined);
           expect(typeof created_at).toBe('string');
           expect(typeof votes).toBe('number');
           expect(typeof article_img_url).toBe('string');
