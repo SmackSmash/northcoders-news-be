@@ -13,7 +13,11 @@ const notFoundHandler = (req, res) => {
 };
 
 const errorHandler = (err, req, res, next) => {
-  console.error(err);
+  // TODO: Write logic for repackaging db errors in our nice AppError class
+  // Seperation of concerns: seperate error hadnlers for different error types
+  if (err.code === '22P02') {
+    err = new AppError('Invalid text representation', 400, err.code, req);
+  }
   const status = err.status || 500;
   res.status(status).send({
     error: err || 'Internal Server Error'
