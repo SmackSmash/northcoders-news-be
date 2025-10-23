@@ -50,7 +50,7 @@ describe('GET /', () => {
 });
 
 describe('GET /:articleId', () => {
-  it('retreives a single article with the given id', () => {
+  it('retreives a single article with the given articleId', () => {
     return request(app)
       .get('/api/articles/1')
       .expect(200)
@@ -105,6 +105,27 @@ describe('GET /:articleId', () => {
         expect(status).toBe(400);
         expect(errorMessage).toBe('Invalid text representation');
         expect(typeof path).toBe('string');
+      });
+  });
+});
+
+describe('GET /:articleId/comments', () => {
+  it('retreives a list of comments for the given articleId', () => {
+    return request(app)
+      .get('/api/articles/1/comments')
+      .expect(200)
+      .then(res => {
+        // const article = res.body.article;
+        // expect(article).toBeInstanceOf(Object);
+        // const { article_id, title, topic, body, author, created_at, votes, article_img_url } = article;
+        // expect(typeof article_id).toBe('number');
+        // expect(typeof title).toBe('string');
+        // expect(typeof topic).toBe('string');
+        // expect(typeof author).toBe('string');
+        // expect(typeof body).toBe('string');
+        // expect(typeof created_at).toBe('string');
+        // expect(typeof votes).toBe('number');
+        // expect(typeof article_img_url).toBe('string');
       });
   });
 });

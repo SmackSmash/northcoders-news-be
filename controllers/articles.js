@@ -18,3 +18,7 @@ exports.getArticleById = async (req, res) => {
 
   res.status(200).send({ article });
 };
+
+exports.getCommentsByArticleId = async (req, res) => {
+  res.send('Here are your comments bro!');
+};
