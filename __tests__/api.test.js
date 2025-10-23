@@ -146,17 +146,56 @@ describe('GET /api/articles/:articleId/comments', () => {
       .then(res => {
         const comments = res.body.comments;
 
-        expect(Array.isArray(comments)).toBe(true);
+        expect(comments).toBeInstanceOf(Array);
 
-        // const { article_id, title, topic, body, author, created_at, votes, article_img_url } = article;
-        // expect(typeof article_id).toBe('number');
-        // expect(typeof title).toBe('string');
-        // expect(typeof topic).toBe('string');
-        // expect(typeof author).toBe('string');
-        // expect(typeof body).toBe('string');
-        // expect(typeof created_at).toBe('string');
-        // expect(typeof votes).toBe('number');
-        // expect(typeof article_img_url).toBe('string');
+        comments.forEach(comment => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              article_id: expect.any(Number),
+              body: expect.any(String),
+              votes: expect.any(Number),
+              author: expect.any(String),
+              created_at: expect.any(String)
+            })
+          );
+        });
+      });
+  });
+  it('404: throws a 404 error when given an articleId that does not exist', () => {
+    const articleId = 100000;
+
+    return request(app)
+      .get(`/api/articles/${articleId}/comments`)
+      .expect(404)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 404,
+            errorMessage: `No comments exist for article with id ${articleId}`,
+            path: expect.any(String)
+          })
+        );
+      });
+  });
+  it('400: throws a 400 error when given an invalid articeId', () => {
+    return request(app)
+      .get('/api/articles/invalid/comments')
+      .expect(400)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 400,
+            errorMessage: 'Invalid text representation',
+            path: expect.any(String)
+          })
+        );
       });
   });
 });
