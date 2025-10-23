@@ -1,4 +1,5 @@
 const { readAllArticles, readArticleById } = require('../models/articles');
+const { AppError } = require('./errors');
 
 exports.getAllArticles = async (req, res) => {
   const articles = await readAllArticles();
@@ -12,15 +13,7 @@ exports.getArticleById = async (req, res) => {
   const article = await readArticleById(articleId);
 
   if (!article) {
-    res.status(404).send({
-      error: {
-        timestamp: new Date(Date.now()),
-        status: 404,
-        error: 'Not Found',
-        message: `No article exists with id ${articleId}`,
-        path: req.originalUrl
-      }
-    });
+    throw new AppError(`No article exists with id ${articleId}`, 404, 'Not Found', req);
   }
 
   res.status(200).send({ article });
