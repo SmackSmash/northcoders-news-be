@@ -13,7 +13,7 @@ exports.getArticleById = async (req, res) => {
   const article = await readArticleById(articleId);
 
   if (!article) {
-    throw new AppError(`No article exists with id ${articleId}`, 404, 'Not Found', req);
+    throw new AppError(`No article exists with id ${articleId}`, 404, req);
   }
 
   res.status(200).send({ article });
