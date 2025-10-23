@@ -9,7 +9,7 @@ class AppError extends Error {
 }
 
 const notFoundHandler = (req, res) => {
-  res.status(404).send({ message: 'Not Found' });
+  res.status(404).send({ error: new AppError('Not found', 404, req) });
 };
 
 const errorHandler = (err, req, res, next) => {
