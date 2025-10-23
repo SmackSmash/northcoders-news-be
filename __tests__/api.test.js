@@ -16,15 +16,17 @@ describe('GET /api/topics', () => {
       .then(res => {
         const topics = res.body.topics;
 
-        expect(Array.isArray(topics)).toBe(true);
+        expect(topics).toBeInstanceOf(Array);
         expect(topics.length).toBeGreaterThan(0);
 
         topics.forEach(topic => {
-          const { slug, description, img_url } = topic;
-
-          expect(typeof slug).toBe('string');
-          expect(typeof description).toBe('string');
-          expect(typeof img_url).toBe('string');
+          expect(topic).toEqual(
+            expect.objectContaining({
+              slug: expect.any(String),
+              description: expect.any(String),
+              img_url: expect.any(String)
+            })
+          );
         });
       });
   });
@@ -39,21 +41,24 @@ describe('GET /api/articles', () => {
       .then(res => {
         const articles = res.body.articles;
 
-        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toBeInstanceOf(Array);
         expect(articles.length).toBeGreaterThan(0);
 
         articles.forEach(article => {
-          const { article_id, title, topic, body, author, created_at, votes, article_img_url, comment_count } = article;
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number)
+            })
+          );
 
-          expect(typeof article_id).toBe('number');
-          expect(typeof title).toBe('string');
-          expect(typeof topic).toBe('string');
-          expect(typeof author).toBe('string');
-          expect(body).toBe(undefined);
-          expect(typeof created_at).toBe('string');
-          expect(typeof votes).toBe('number');
-          expect(typeof article_img_url).toBe('string');
-          expect(typeof comment_count).toBe('number');
+          expect(article).toEqual(expect.not.objectContaining({ body: expect.any(String) }));
         });
       });
   });
@@ -81,18 +86,18 @@ describe('GET /api/articles/:articleId', () => {
       .then(res => {
         const article = res.body.article;
 
-        expect(article).toBeInstanceOf(Object);
-
-        const { article_id, title, topic, body, author, created_at, votes, article_img_url } = article;
-
-        expect(typeof article_id).toBe('number');
-        expect(typeof title).toBe('string');
-        expect(typeof topic).toBe('string');
-        expect(typeof author).toBe('string');
-        expect(typeof body).toBe('string');
-        expect(typeof created_at).toBe('string');
-        expect(typeof votes).toBe('number');
-        expect(typeof article_img_url).toBe('string');
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String)
+          })
+        );
       });
   });
   it('404: throws a 404 error when given an articleId that does not exist', () => {
@@ -104,14 +109,14 @@ describe('GET /api/articles/:articleId', () => {
       .then(res => {
         const error = res.body.error;
 
-        expect(error).toBeInstanceOf(Object);
-
-        const { timestamp, status, errorMessage, path } = error;
-
-        expect(typeof timestamp).toBe('string');
-        expect(status).toBe(404);
-        expect(errorMessage).toBe(`No article exists with id ${articleId}`);
-        expect(typeof path).toBe('string');
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 404,
+            errorMessage: `No article exists with id ${articleId}`,
+            path: expect.any(String)
+          })
+        );
       });
   });
   it('400: throws a 400 error when given an invalid articeId', () => {
@@ -121,14 +126,14 @@ describe('GET /api/articles/:articleId', () => {
       .then(res => {
         const error = res.body.error;
 
-        expect(error).toBeInstanceOf(Object);
-
-        const { timestamp, status, errorMessage, path } = error;
-
-        expect(typeof timestamp).toBe('string');
-        expect(status).toBe(400);
-        expect(errorMessage).toBe('Invalid text representation');
-        expect(typeof path).toBe('string');
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 400,
+            errorMessage: 'Invalid text representation',
+            path: expect.any(String)
+          })
+        );
       });
   });
 });
@@ -139,8 +144,10 @@ describe('GET /api/articles/:articleId/comments', () => {
       .get('/api/articles/1/comments')
       .expect(200)
       .then(res => {
-        // const article = res.body.article;
-        // expect(article).toBeInstanceOf(Object);
+        const comments = res.body.comments;
+
+        expect(Array.isArray(comments)).toBe(true);
+
         // const { article_id, title, topic, body, author, created_at, votes, article_img_url } = article;
         // expect(typeof article_id).toBe('number');
         // expect(typeof title).toBe('string');
@@ -163,15 +170,17 @@ describe('GET /api/users', () => {
       .then(res => {
         const users = res.body.users;
 
-        expect(Array.isArray(users)).toBe(true);
+        expect(users).toBeInstanceOf(Array);
         expect(users.length).toBeGreaterThan(0);
 
         users.forEach(user => {
-          const { username, name, avatar_url } = user;
-
-          expect(typeof username).toBe('string');
-          expect(typeof name).toBe('string');
-          expect(typeof avatar_url).toBe('string');
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String)
+            })
+          );
         });
       });
   });
@@ -186,14 +195,14 @@ describe('GET /[invalidPath]', () => {
       .then(res => {
         const error = res.body.error;
 
-        expect(error).toBeInstanceOf(Object);
-
-        const { timestamp, status, errorMessage, path } = error;
-
-        expect(typeof timestamp).toBe('string');
-        expect(status).toBe(404);
-        expect(errorMessage).toBe('Not found');
-        expect(typeof path).toBe('string');
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 404,
+            errorMessage: 'Not found',
+            path: expect.any(String)
+          })
+        );
       });
   });
 });
