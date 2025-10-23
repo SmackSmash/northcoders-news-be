@@ -4,7 +4,7 @@ const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data');
 const app = require('../app');
 
-beforeEach(() => seed(data));
+beforeAll(() => seed(data));
 afterAll(() => db.end());
 
 // TOPICS
