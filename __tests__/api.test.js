@@ -296,6 +296,26 @@ describe('POST /api/articles/:articleId/comments', () => {
         );
       });
   });
+  it('404: throws a 404 error when passed a username that does not exist in the users table', () => {
+    const commentData = { username: 'unknown', body: 'this is only a test' };
+
+    return request(app)
+      .post(`/api/articles/1/comments`)
+      .send(commentData)
+      .expect(404)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 404,
+            errorMessage: `No user exists with username ${commentData.username}`,
+            path: expect.any(String)
+          })
+        );
+      });
+  });
 });
 
 // USERS
