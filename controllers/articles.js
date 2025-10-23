@@ -1,5 +1,4 @@
 const { readAllArticles, readArticleById, readCommentsByArticleId, createComment } = require('../models/articles');
-const { readUserByUsername } = require('../models/users');
 const { AppError } = require('./errors');
 
 exports.getAllArticles = async (req, res) => {
@@ -30,12 +29,6 @@ exports.addComment = async (req, res) => {
   const comment = req.body;
 
   if (!comment.username || !comment.body) throw new AppError(`Invalid comment data`, 400, req);
-
-  const user = await readUserByUsername(comment.username);
-  if (!user) throw new AppError(`No user exists with username ${comment.username}`, 404, req);
-
-  const article = await readArticleById(articleId);
-  if (!article) throw new AppError(`No article exists with id ${articleId}`, 404, req);
 
   const addedComment = await createComment(articleId, comment);
   if (!addedComment) throw new AppError(`Comment was not added`, 400, req);
