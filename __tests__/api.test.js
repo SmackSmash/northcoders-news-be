@@ -131,7 +131,7 @@ describe('GET /api/articles/:articleId', () => {
           expect.objectContaining({
             timestamp: expect.any(String),
             status: 400,
-            errorMessage: 'Invalid text representation',
+            errorMessage: 'Invalid input syntax',
             path: expect.any(String)
           })
         );
@@ -207,7 +207,7 @@ describe('GET /api/articles/:articleId/comments', () => {
           expect.objectContaining({
             timestamp: expect.any(String),
             status: 400,
-            errorMessage: 'Invalid text representation',
+            errorMessage: 'Invalid input syntax',
             path: expect.any(String)
           })
         );
@@ -260,7 +260,7 @@ describe('POST /api/articles/:articleId/comments', () => {
         );
       });
   });
-  it('400: throws a 400 error when given an invalid articeId', () => {
+  it('400: throws a 400 error when given an invalid articleId', () => {
     return request(app)
       .post(`/api/articles/invalid/comments`)
       .send({ username: 'butter_bridge', body: 'this is only a test' })
@@ -272,7 +272,7 @@ describe('POST /api/articles/:articleId/comments', () => {
           expect.objectContaining({
             timestamp: expect.any(String),
             status: 400,
-            errorMessage: 'Invalid text representation',
+            errorMessage: 'Invalid input syntax',
             path: expect.any(String)
           })
         );
