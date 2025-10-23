@@ -4,7 +4,7 @@ const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data');
 const app = require('../app');
 
-beforeAll(() => seed(data));
+beforeEach(() => seed(data));
 afterAll(() => db.end());
 
 // TOPICS
@@ -88,14 +88,15 @@ describe('GET /api/articles/:articleId', () => {
 
         expect(article).toEqual(
           expect.objectContaining({
-            article_id: expect.any(Number),
-            title: expect.any(String),
-            topic: expect.any(String),
-            author: expect.any(String),
-            body: expect.any(String),
-            created_at: expect.any(String),
-            votes: expect.any(Number),
-            article_img_url: expect.any(String)
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: '2020-07-09T20:11:00.000Z',
+            votes: 100,
+            article_img_url:
+              'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
           })
         );
       });
@@ -208,6 +209,32 @@ describe('GET /api/articles/:articleId/comments', () => {
             status: 400,
             errorMessage: 'Invalid text representation',
             path: expect.any(String)
+          })
+        );
+      });
+  });
+});
+
+describe('POST /api/articles/:articleId/comments', () => {
+  it('200: adds a comment to the db and responds with the posted comment', () => {
+    const articleId = 1;
+    const commentData = { username: 'butter_bridge', body: 'this is only a test' };
+
+    return request(app)
+      .post(`/api/articles/${articleId}/comments`)
+      .send({ username: 'butter_bridge', body: 'this is only a test' })
+      .expect(200)
+      .then(res => {
+        const comment = res.body.comment;
+
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            article_id: 1,
+            body: commentData.body,
+            votes: 0,
+            author: commentData.username,
+            created_at: expect.any(String)
           })
         );
       });

@@ -57,8 +57,8 @@ const seed = ({
         author VARCHAR(100) NOT NULL,
         FOREIGN KEY (author) REFERENCES users(username),
         body TEXT NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        votes INT NOT NULL DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        votes INT DEFAULT 0 NOT NULL,
         article_img_url VARCHAR(1000) NOT NULL
       );`);
     })
@@ -68,10 +68,10 @@ const seed = ({
         article_id INT NOT NULL,
         FOREIGN KEY (article_id) REFERENCES articles(article_id),
         body TEXT NOT NULL,
-        votes INT NOT NULL DEFAULT 0,
+        votes INT DEFAULT 0 NOT NULL,
         author VARCHAR(100) NOT NULL,
         FOREIGN KEY (author) REFERENCES users(username),
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       );`);
     })
     .then(() => {
@@ -109,7 +109,7 @@ const seed = ({
         FOREIGN KEY (username) REFERENCES users(username),
         article_id INT NOT NULL,
         FOREIGN KEY (article_id) REFERENCES articles(article_id),
-        vote_count INT NOT NULL DEFAULT 0,
+        vote_count INT DEFAULT 0 NOT NULL,
         UNIQUE (username, article_id, vote_count)
       );`);
     })
@@ -136,14 +136,19 @@ const seed = ({
     .then(({ rows }) => {
       const lookup = createLookupObj(rows, 'title', 'article_id');
 
-      commentData.forEach(comment => {
-        comment.article_id = lookup[comment.article_title];
-        delete comment.article_title;
-      });
+      const commentDataWithArticleId = commentData.map(({ article_title, body, votes, author, created_at }) => ({
+        article_id: lookup[article_title],
+        body,
+        votes,
+        author,
+        created_at
+      }));
 
       const columns = ['article_id', 'body', 'votes', 'author', 'created_at'];
 
-      return db.query(format(`INSERT INTO comments (${columns}) VALUES %L;`, formatDataForSQL(columns, commentData)));
+      return db.query(
+        format(`INSERT INTO comments (${columns}) VALUES %L;`, formatDataForSQL(columns, commentDataWithArticleId))
+      );
     })
     .then(() => {
       const columns = ['emoji'];

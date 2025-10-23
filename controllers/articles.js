@@ -1,4 +1,4 @@
-const { readAllArticles, readArticleById, readCommentsByArticleId } = require('../models/articles');
+const { readAllArticles, readArticleById, readCommentsByArticleId, createComment } = require('../models/articles');
 const { AppError } = require('./errors');
 
 exports.getAllArticles = async (req, res) => {
@@ -25,4 +25,15 @@ exports.getCommentsByArticleId = async (req, res) => {
   if (!comments.length) throw new AppError(`No comments exist for article with id ${articleId}`, 404, req);
 
   res.status(200).send({ comments });
+};
+
+exports.addComment = async (req, res) => {
+  const { articleId } = req.params;
+  const comment = req.body;
+
+  const addedComment = await createComment(articleId, comment);
+
+  if (!addedComment) throw new AppError(`Comment was not added`, 400, req);
+
+  res.status(200).send({ comment: addedComment });
 };

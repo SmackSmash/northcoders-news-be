@@ -2,6 +2,5 @@ const db = require('../db/connection');
 
 exports.readAllTopics = async () => {
   const response = await db.query('SELECT * FROM topics');
-  const topics = response.rows;
-  return topics;
+  return response.rows;
 };
