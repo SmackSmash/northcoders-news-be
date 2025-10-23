@@ -162,6 +162,20 @@ describe('GET /api/articles/:articleId/comments', () => {
         });
       });
   });
+  it('200: retrieves an array of comments in descending date order', () => {
+    return request(app)
+      .get('/api/articles/1/comments')
+      .expect(200)
+      .then(res => {
+        const comments = res.body.comments;
+
+        comments.forEach((comment, index) => {
+          if (index > 0) {
+            expect(Date.parse(comment.created_at)).toBeLessThanOrEqual(Date.parse(comments[index - 1].created_at));
+          }
+        });
+      });
+  });
   it('404: throws a 404 error when given an articleId that does not exist', () => {
     const articleId = 100000;
 
