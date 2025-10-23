@@ -222,7 +222,7 @@ describe('POST /api/articles/:articleId/comments', () => {
 
     return request(app)
       .post(`/api/articles/${articleId}/comments`)
-      .send({ username: 'butter_bridge', body: 'this is only a test' })
+      .send(commentData)
       .expect(200)
       .then(res => {
         const comment = res.body.comment;
@@ -230,11 +230,68 @@ describe('POST /api/articles/:articleId/comments', () => {
         expect(comment).toEqual(
           expect.objectContaining({
             comment_id: expect.any(Number),
-            article_id: 1,
+            article_id: articleId,
             body: commentData.body,
             votes: 0,
             author: commentData.username,
             created_at: expect.any(String)
+          })
+        );
+      });
+  });
+  it('404: throws a 404 error when given an articleId that does not exist', () => {
+    const articleId = 100000;
+    const commentData = { username: 'butter_bridge', body: 'this is only a test' };
+
+    return request(app)
+      .post(`/api/articles/${articleId}/comments`)
+      .send(commentData)
+      .expect(404)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 404,
+            errorMessage: `No article exists with id ${articleId}`,
+            path: expect.any(String)
+          })
+        );
+      });
+  });
+  it('400: throws a 400 error when given an invalid articeId', () => {
+    return request(app)
+      .post(`/api/articles/invalid/comments`)
+      .send({ username: 'butter_bridge', body: 'this is only a test' })
+      .expect(400)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 400,
+            errorMessage: 'Invalid text representation',
+            path: expect.any(String)
+          })
+        );
+      });
+  });
+  it('400: throws a 400 error when given invalid comment data', () => {
+    return request(app)
+      .post(`/api/articles/1/comments`)
+      .send({ bad: 'butter_bridge', data: 'this is only a test' })
+      .expect(400)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 400,
+            errorMessage: 'Invalid comment data',
+            path: expect.any(String)
           })
         );
       });

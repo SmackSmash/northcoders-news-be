@@ -15,6 +15,7 @@ const notFoundHandler = (req, res) => {
 const errorHandler = (err, req, res, next) => {
   if (err.code === '22P02') err = new AppError('Invalid text representation', 400, req);
   if (err.code === '42601') err = new AppError('Syntax error', 500, req);
+  if (err.code === '23503') err = new AppError('Foreign key violation', 400, req);
 
   res.status(err.status || 500).send({
     error: err || 'Internal Server Error'

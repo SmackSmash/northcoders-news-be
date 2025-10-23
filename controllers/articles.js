@@ -31,6 +31,12 @@ exports.addComment = async (req, res) => {
   const { articleId } = req.params;
   const comment = req.body;
 
+  if (!comment.username || !comment.body) throw new AppError(`Invalid comment data`, 400, req);
+
+  const article = await readArticleById(articleId);
+
+  if (!article) throw new AppError(`No article exists with id ${articleId}`, 404, req);
+
   const addedComment = await createComment(articleId, comment);
 
   if (!addedComment) throw new AppError(`Comment was not added`, 400, req);
