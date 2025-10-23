@@ -28,7 +28,7 @@ exports.readArticleById = async articleId => {
 };
 
 exports.readCommentsByArticleId = async articleId => {
-  const response = await db.query(`SELECT * FROM comments WHERE article_id = $1`, [articleId]);
+  const response = await db.query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC`, [articleId]);
   const comments = response.rows;
   return comments;
 };
