@@ -23,9 +23,12 @@ exports.getArticleById = async (req, res) => {
 
 exports.incrementVotesByArticleById = async (req, res) => {
   const { articleId } = req.params;
+
+  if (!req.body || !req.body.inc_votes) throw new AppError('Request body must have an "inc_votes" property', 400, req);
+
   const newVote = req.body.inc_votes;
 
-  if (!newVote || typeof newVote !== 'number') throw new AppError('Vote value must be a number', 422, req);
+  if (typeof newVote !== 'number') throw new AppError('Vote value must be a number', 400, req);
 
   const article = await updateVotesByArticleById(articleId, newVote);
   if (!article) throw new AppError(`No article exists with id ${articleId}`, 404, req);

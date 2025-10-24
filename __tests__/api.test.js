@@ -139,6 +139,113 @@ describe('GET /api/articles/:articleId', () => {
   });
 });
 
+describe('PATCH /api/articles/:articleId', () => {
+  it('200: returns an updated article with the new vote count for a given articleId', () => {
+    return request(app)
+      .patch('/api/articles/1')
+      .send({
+        inc_votes: 1
+      })
+      .expect(200)
+      .then(res => {
+        const article = res.body.article;
+
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: '2020-07-09T20:11:00.000Z',
+            votes: 101,
+            article_img_url:
+              'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+          })
+        );
+      });
+  });
+  it('404: throws a 404 error when given an articleId that does not exist', () => {
+    const articleId = 100000;
+
+    return request(app)
+      .patch(`/api/articles/${articleId}`)
+      .send({
+        inc_votes: 1
+      })
+      .expect(404)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 404,
+            errorMessage: `No article exists with id ${articleId}`,
+            path: expect.any(String)
+          })
+        );
+      });
+  });
+  it('400: throws a 400 error when given an invalid articeId', () => {
+    return request(app)
+      .patch('/api/articles/invalid')
+      .send({
+        inc_votes: 1
+      })
+      .expect(400)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 400,
+            errorMessage: 'Invalid input syntax',
+            path: expect.any(String)
+          })
+        );
+      });
+  });
+  it('400: throws a 400 error when no inc_votes key is passed in the body', () => {
+    return request(app)
+      .patch('/api/articles/1')
+      .expect(400)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 400,
+            errorMessage: 'Request body must have an "inc_votes" property',
+            path: expect.any(String)
+          })
+        );
+      });
+  });
+  it('400: throws a 400 error when given an invalid inc_votes value', () => {
+    return request(app)
+      .patch('/api/articles/1')
+      .send({
+        inc_votes: 'invalid'
+      })
+      .expect(400)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 400,
+            errorMessage: 'Vote value must be a number',
+            path: expect.any(String)
+          })
+        );
+      });
+  });
+});
+
 describe('GET /api/articles/:articleId/comments', () => {
   it('200: retrieves a list of comments for the given articleId', () => {
     return request(app)
