@@ -1,4 +1,10 @@
-const { readAllArticles, readArticleById, readCommentsByArticleId, createComment } = require('../models/articles');
+const {
+  readAllArticles,
+  readArticleById,
+  readCommentsByArticleId,
+  createComment,
+  updateVotesByArticleById
+} = require('../models/articles');
 const { AppError } = require('./errors');
 
 exports.getAllArticles = async (req, res) => {
@@ -10,6 +16,18 @@ exports.getArticleById = async (req, res) => {
   const { articleId } = req.params;
 
   const article = await readArticleById(articleId);
+  if (!article) throw new AppError(`No article exists with id ${articleId}`, 404, req);
+
+  res.status(200).send({ article });
+};
+
+exports.incrementVotesByArticleById = async (req, res) => {
+  const { articleId } = req.params;
+  const newVote = req.body.inc_votes;
+
+  if (!newVote || typeof newVote !== 'number') throw new AppError('Vote value must be a number', 422, req);
+
+  const article = await updateVotesByArticleById(articleId, newVote);
   if (!article) throw new AppError(`No article exists with id ${articleId}`, 404, req);
 
   res.status(200).send({ article });

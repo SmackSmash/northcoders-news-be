@@ -30,7 +30,7 @@ const dbErrorHandler = (err, req, res, next) => {
     case '40P01':
       return res.status(409).send({ error: new AppError('Temporary DB conflict, try again', 409, req) });
     default:
-      return res.status(500).send({ error: new AppError('DB error', 500, req) });
+      res.status(500).send({ error: new AppError('DB error', 500, req) });
   }
 };
 

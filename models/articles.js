@@ -26,6 +26,14 @@ exports.readArticleById = async articleId => {
   return response.rows[0];
 };
 
+exports.updateVotesByArticleById = async (articleId, votes) => {
+  const response = await db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`, [
+    votes,
+    articleId
+  ]);
+  return response.rows[0];
+};
+
 exports.readCommentsByArticleId = async articleId => {
   const response = await db.query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC`, [articleId]);
   return response.rows;
