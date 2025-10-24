@@ -102,6 +102,30 @@ describe('GET /api/articles', () => {
       })
     );
   });
+  it('200: ignores invalid "sort_by" and "order" query strings when given', () => {
+    const disallowedSorts = ['bogus', 'invalid'];
+
+    return Promise.all(
+      disallowedSorts.map(column => {
+        return request(app)
+          .get('/api/articles')
+          .query({ sort_by: column })
+          .expect(200)
+          .then(res => {
+            const articles = res.body.articles;
+            expect(articles).toBeSortedBy('created_at', { descending: true });
+          });
+      }),
+      request(app)
+        .get('/api/articles')
+        .query({ sort_by: 'created_at', order: 'invalid' })
+        .expect(200)
+        .then(res => {
+          const articles = res.body.articles;
+          expect(articles).toBeSortedBy('created_at', { descending: true });
+        })
+    );
+  });
 });
 
 describe('GET /api/articles/:articleId', () => {
