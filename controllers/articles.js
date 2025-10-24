@@ -1,10 +1,4 @@
-const {
-  readAllArticles,
-  readArticleById,
-  readCommentsByArticleId,
-  createComment,
-  updateVotesByArticleById
-} = require('../models/articles');
+const { readAllArticles, readArticleById, updateVotesByArticleById } = require('../models/articles');
 const { AppError } = require('./errors');
 
 // @route   GET /api/articles
@@ -45,29 +39,4 @@ exports.incrementVotesByArticleById = async (req, res) => {
   if (!article) throw new AppError(`No article exists with id ${articleId}`, 404, req);
 
   res.status(200).send({ article });
-};
-
-// @route   GET /api/articles/:articleId/comments
-// @desc    Get comments for article
-exports.getCommentsByArticleId = async (req, res) => {
-  const { articleId } = req.params;
-
-  const comments = await readCommentsByArticleId(articleId);
-  if (!comments.length) throw new AppError(`No comments exist for article with id ${articleId}`, 404, req);
-
-  res.status(200).send({ comments });
-};
-
-// @route   POST /api/articles/:articleId/comments
-// @desc    Add comment to article
-exports.addComment = async (req, res) => {
-  const { articleId } = req.params;
-  const comment = req.body;
-
-  if (!comment.username || !comment.body) throw new AppError(`Invalid comment data`, 400, req);
-
-  const addedComment = await createComment(articleId, comment);
-  if (!addedComment) throw new AppError(`Comment was not added`, 400, req);
-
-  res.status(200).send({ comment: addedComment });
 };
