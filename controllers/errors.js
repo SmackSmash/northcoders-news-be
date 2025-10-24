@@ -13,7 +13,9 @@ const notFoundHandler = (req, res) => {
 };
 
 const dbErrorHandler = (err, req, res, next) => {
-  if (!err.code) next(err);
+  console.error(err);
+
+  if (!err.code) return next(err);
 
   switch (err.code) {
     case '23505':
@@ -36,7 +38,7 @@ const dbErrorHandler = (err, req, res, next) => {
 
 const appErrorHandler = (err, req, res, next) => {
   res.status(err.status || 500).send({
-    error: err || 'Internal Server Error'
+    error: (err.status ? err : err.message) || 'Internal Server Error'
   });
 };
 

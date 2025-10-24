@@ -448,6 +448,35 @@ describe('GET /api/users', () => {
   });
 });
 
+// COMMENTS
+describe('DELETE /api/comments/:commentId', () => {
+  it('204: deletes the comment and returns nothing when passed a valid commentId', () => {
+    return request(app)
+      .delete('/api/comments/1')
+      .expect(204)
+      .then(res => {
+        expect(res.body).toEqual({});
+      });
+  });
+  it('400: throws a 400 error when passed an invalid commentId', () => {
+    return request(app)
+      .delete('/api/comments/invalid')
+      .expect(400)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 400,
+            errorMessage: 'Invalid input syntax',
+            path: expect.any(String)
+          })
+        );
+      });
+  });
+});
+
 // 404
 describe('GET /[invalidPath]', () => {
   it('returns a 404 error when visiting an invalid path', () => {

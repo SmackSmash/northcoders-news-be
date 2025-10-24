@@ -1,8 +1,10 @@
+const format = require('pg-format');
 const db = require('../db/connection');
 
-exports.readAllArticles = async () => {
+exports.readAllArticles = async (sort_by = 'created_at', order = 'asc') => {
   const response = await db.query(
-    `SELECT 
+    format(
+      `SELECT 
       articles.article_id, 
       articles.title, 
       articles.topic, 
@@ -15,7 +17,10 @@ exports.readAllArticles = async () => {
     JOIN comments
     ON articles.article_id = comments.article_id
     GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC;`
+    ORDER BY %I %s`,
+      sort_by,
+      order
+    )
   );
   const topics = response.rows;
   return topics;

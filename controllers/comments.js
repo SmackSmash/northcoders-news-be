@@ -1,7 +1,11 @@
-const { AppError } = require('./errors');
+const { deleteCommentById } = require('../models/comments');
 
-exports.removeCommentById = (req, res) => {
+// @route   DELETE /api/comments/:commentId
+// @desc    Delete comment by commentId
+exports.removeCommentById = async (req, res) => {
   const { commentId } = req.params;
-  console.log(commentId);
-  res.send('Remove comment route');
+
+  await deleteCommentById(commentId);
+
+  res.status(204).send({ comment: 'Comment deleted successfully' });
 };

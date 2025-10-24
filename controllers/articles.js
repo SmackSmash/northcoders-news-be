@@ -7,11 +7,17 @@ const {
 } = require('../models/articles');
 const { AppError } = require('./errors');
 
+// @route   GET /api/articles
+// @desc    Get all articles
 exports.getAllArticles = async (req, res) => {
+  const { sort_by, order } = req.query;
+
   const articles = await readAllArticles();
   res.status(200).send({ articles });
 };
 
+// @route   GET /api/articles/:articleId
+// @desc    Get article by articleId
 exports.getArticleById = async (req, res) => {
   const { articleId } = req.params;
 
@@ -21,6 +27,8 @@ exports.getArticleById = async (req, res) => {
   res.status(200).send({ article });
 };
 
+// @route   PATCH /api/articles/:articleId
+// @desc    Increment article vote count
 exports.incrementVotesByArticleById = async (req, res) => {
   const { articleId } = req.params;
 
@@ -36,6 +44,8 @@ exports.incrementVotesByArticleById = async (req, res) => {
   res.status(200).send({ article });
 };
 
+// @route   GET /api/articles/:articleId/comments
+// @desc    Get comments for article
 exports.getCommentsByArticleId = async (req, res) => {
   const { articleId } = req.params;
 
@@ -45,6 +55,8 @@ exports.getCommentsByArticleId = async (req, res) => {
   res.status(200).send({ comments });
 };
 
+// @route   POST /api/articles/:articleId/comments
+// @desc    Add comment to article
 exports.addComment = async (req, res) => {
   const { articleId } = req.params;
   const comment = req.body;
