@@ -5,6 +5,7 @@ exports.apiRoot = (req, res) => {
   res.status(200).send({
     topics: `${protocol}://${host}/api/topics`,
     articles: `${protocol}://${host}/api/articles`,
-    users: `${protocol}://${host}/api/users`
+    users: `${protocol}://${host}/api/users`,
+    comments: `${protocol}://${host}/api/comments`
   });
 };
