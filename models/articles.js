@@ -1,7 +1,7 @@
 const format = require('pg-format');
 const db = require('../db/connection');
 
-exports.readAllArticles = async (sort_by = 'created_at', order = 'asc') => {
+exports.readAllArticles = async (sort_by = 'created_at', order = 'desc') => {
   const response = await db.query(
     format(
       `SELECT 
