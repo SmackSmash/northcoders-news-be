@@ -26,7 +26,7 @@ exports.getArticleById = async (req, res) => {
 
 // @route   PATCH /api/articles/:articleId
 // @desc    Increment article vote count
-exports.incrementVotesByArticleById = async (req, res) => {
+exports.incrementVotesByArticleId = async (req, res) => {
   const { articleId } = req.params;
 
   if (!req.body || !req.body.inc_votes) throw new AppError('Request body must have an "inc_votes" property', 400, req);

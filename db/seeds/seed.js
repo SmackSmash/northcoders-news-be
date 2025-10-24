@@ -186,7 +186,7 @@ const seed = ({
         } database seeded successfully`
       );
     })
-    .catch(error => console.error(error.message));
+    .catch(err => console.error(err.message));
 };
 
 module.exports = seed;
