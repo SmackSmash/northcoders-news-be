@@ -1,5 +1,5 @@
 const express = require('express');
-const { notFoundHandler, errorHandler } = require('./controllers/errors');
+const { notFoundHandler, dbErrorHandler, appErrorHandler } = require('./controllers/errors');
 
 const app = express();
 
@@ -11,6 +11,7 @@ app.use('/api/articles', require('./routes/api/articles'));
 app.use('/api/users', require('./routes/api/users'));
 
 app.use(notFoundHandler);
-app.use(errorHandler);
+app.use(dbErrorHandler);
+app.use(appErrorHandler);
 
 module.exports = app;
