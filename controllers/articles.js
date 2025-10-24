@@ -12,11 +12,8 @@ const { AppError } = require('./errors');
 exports.getAllArticles = async (req, res) => {
   let { sort_by, order } = req.query;
 
-  if (!order || order.toUpperCase() !== 'ASC' || order.toUpperCase() !== 'DESC') order = 'DESC';
-
-  const allowedSorts = ['title', 'topic', 'author', 'created_at', 'votes'];
-
-  if (!sort_by || !allowedSorts.includes(sort_by)) sort_by = 'created_at';
+  if (!order || !['ASC', 'DESC'].includes(order.toUpperCase())) order = 'DESC';
+  if (!sort_by || !['title', 'topic', 'author', 'created_at', 'votes'].includes(sort_by)) sort_by = 'created_at';
 
   const articles = await readAllArticles(sort_by, order);
   res.status(200).send({ articles });

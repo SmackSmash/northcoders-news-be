@@ -62,7 +62,7 @@ describe('GET /api/articles', () => {
         });
       });
   });
-  it('200: retrieves an array of articles in descending date order', () => {
+  it('200: retrieves an array of articles in descending date order by default', () => {
     return request(app)
       .get('/api/articles')
       .expect(200)
@@ -75,6 +75,32 @@ describe('GET /api/articles', () => {
           }
         });
       });
+  });
+  it('200: retrieves an array of articles sorted in the order given via the "sort_by" and "order" query strings', () => {
+    const allowedSorts = ['title', 'topic', 'author', 'created_at', 'votes'];
+
+    return Promise.all(
+      allowedSorts.map(column => {
+        return request(app)
+          .get('/api/articles')
+          .query({ sort_by: column })
+          .expect(200)
+          .then(res => {
+            const articles = res.body.articles;
+            expect(articles).toBeSortedBy(column, { descending: true });
+          });
+      }),
+      allowedSorts.map(column => {
+        return request(app)
+          .get('/api/articles')
+          .query({ sort_by: column, order: 'ASC' })
+          .expect(200)
+          .then(res => {
+            const articles = res.body.articles;
+            expect(articles).toBeSortedBy(column, { ascending: true });
+          });
+      })
+    );
   });
 });
 

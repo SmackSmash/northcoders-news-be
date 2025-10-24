@@ -30,6 +30,9 @@ importers:
       jest-extended:
         specifier: ^6.0.0
         version: 6.0.0(jest@30.2.0(@types/node@24.9.1))(typescript@5.9.3)
+      jest-sorted:
+        specifier: ^1.0.15
+        version: 1.0.15
       nodemon:
         specifier: ^3.1.10
         version: 3.1.10
@@ -1160,6 +1163,9 @@ packages:
   jest-snapshot@30.2.0:
     resolution: {integrity: sha512-5WEtTy2jXPFypadKNpbNkZ72puZCa6UjSr/7djeecHWOu7iYhSXSnHScT8wBz3Rn8Ena5d5RYRcsyKIeqG1IyA==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
+
+  jest-sorted@1.0.15:
+    resolution: {integrity: sha512-bb5HzfyUqv22ToD63KRACZiwHVRVVj6/bl53VOODNQSzmTwKuTM0zYI73aByYulYVkugPmgGBXUTY8YLJYotKw==}
 
   jest-util@30.2.0:
     resolution: {integrity: sha512-QKNsM0o3Xe6ISQU869e+DhG+4CK/48aHYdJZGlFQVTjnbvgpcKyxpzk29fGiO7i/J8VENZ+d2iGnSsvmuHywlA==}
@@ -3187,6 +3193,8 @@ snapshots:
       synckit: 0.11.11
     transitivePeerDependencies:
       - supports-color
+
+  jest-sorted@1.0.15: {}
 
   jest-util@30.2.0:
     dependencies:
