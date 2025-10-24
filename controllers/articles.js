@@ -10,9 +10,15 @@ const { AppError } = require('./errors');
 // @route   GET /api/articles
 // @desc    Get all articles
 exports.getAllArticles = async (req, res) => {
-  const { sort_by, order } = req.query;
+  let { sort_by, order } = req.query;
 
-  const articles = await readAllArticles();
+  if (!order || order.toUpperCase() !== 'ASC' || order.toUpperCase() !== 'DESC') order = 'DESC';
+
+  const allowedSorts = ['title', 'topic', 'author', 'created_at', 'votes'];
+
+  if (!sort_by || !allowedSorts.includes(sort_by)) sort_by = 'created_at';
+
+  const articles = await readAllArticles(sort_by, order);
   res.status(200).send({ articles });
 };
 

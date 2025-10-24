@@ -458,6 +458,25 @@ describe('DELETE /api/comments/:commentId', () => {
         expect(res.body).toEqual({});
       });
   });
+  it('404: throws a 404 error when given a commentId that does not exist', () => {
+    const commentId = 100000;
+
+    return request(app)
+      .delete(`/api/comments/${commentId}`)
+      .expect(404)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 404,
+            errorMessage: `No comment found with id ${commentId}`,
+            path: expect.any(String)
+          })
+        );
+      });
+  });
   it('400: throws a 400 error when passed an invalid commentId', () => {
     return request(app)
       .delete('/api/comments/invalid')

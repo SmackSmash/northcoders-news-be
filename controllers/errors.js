@@ -13,8 +13,6 @@ const notFoundHandler = (req, res) => {
 };
 
 const dbErrorHandler = (err, req, res, next) => {
-  console.error(err);
-
   if (!err.code) return next(err);
 
   switch (err.code) {
