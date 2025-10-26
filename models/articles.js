@@ -23,11 +23,13 @@ exports.readAllArticles = async (sort_by = 'article_id', order = 'DESC') => {
     )
   );
   const articles = response.rows;
+
   return articles;
 };
 
 exports.readArticleById = async articleId => {
   const response = await db.query(`SELECT * FROM articles WHERE article_id = $1`, [articleId]);
+
   return response.rows[0];
 };
 
@@ -36,5 +38,6 @@ exports.updateVotesByArticleById = async (articleId, votes) => {
     votes,
     articleId
   ]);
+
   return response.rows[0];
 };

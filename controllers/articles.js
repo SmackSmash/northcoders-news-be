@@ -5,11 +5,11 @@ const { AppError } = require('./errors');
 // @desc    Get all articles
 exports.getAllArticles = async (req, res) => {
   let { sort_by, order } = req.query;
-
   if (!order || !['ASC', 'DESC'].includes(order.toUpperCase())) order = 'DESC';
   if (!sort_by || !['title', 'topic', 'author', 'created_at', 'votes'].includes(sort_by)) sort_by = 'created_at';
 
   const articles = await readAllArticles(sort_by, order);
+
   res.status(200).send({ articles });
 };
 
@@ -30,9 +30,7 @@ exports.incrementVotesByArticleId = async (req, res) => {
   const { articleId } = req.params;
 
   if (!req.body || !req.body.inc_votes) throw new AppError('Request body must have an "inc_votes" property', 400, req);
-
   const newVote = req.body.inc_votes;
-
   if (typeof newVote !== 'number') throw new AppError('Vote value must be a number', 400, req);
 
   const article = await updateVotesByArticleById(articleId, newVote);

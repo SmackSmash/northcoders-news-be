@@ -7,7 +7,6 @@ exports.removeCommentById = async (req, res) => {
   const { commentId } = req.params;
 
   const deletedRowCount = await deleteCommentById(commentId);
-
   if (deletedRowCount === 0) throw new AppError(`No comment found with id ${commentId}`, 404, req);
 
   res.status(204).send({ comment: 'Comment deleted successfully' });
@@ -29,7 +28,6 @@ exports.getCommentsByArticleId = async (req, res) => {
 exports.addComment = async (req, res) => {
   const { articleId } = req.params;
   const comment = req.body;
-
   if (!comment.username || !comment.body) throw new AppError(`Invalid comment data`, 400, req);
 
   const addedComment = await createComment(articleId, comment);

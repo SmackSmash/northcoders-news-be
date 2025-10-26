@@ -2,11 +2,13 @@ const db = require('../db/connection');
 
 exports.deleteCommentById = async commentId => {
   const response = await db.query(`DELETE FROM comments WHERE comment_id = $1`, [commentId]);
+
   return response.rowCount;
 };
 
 exports.readCommentsByArticleId = async articleId => {
   const response = await db.query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC`, [articleId]);
+
   return response.rows;
 };
 
@@ -17,5 +19,6 @@ exports.createComment = async (articleId, comment) => {
     author,
     body
   ]);
+
   return response.rows[0];
 };
