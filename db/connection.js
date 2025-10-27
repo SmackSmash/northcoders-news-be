@@ -1,10 +1,12 @@
 const { Pool } = require('pg');
-const { PGDATABASE } = require('../config/keys');
+const { PGDATABASE, DATABASE_URL } = require('../config/keys');
 
-const db = new Pool({ database: PGDATABASE });
+if (!PGDATABASE && !DATABASE_URL) throw new Error('No PGDATABASE configured');
 
-if (!PGDATABASE) throw new Error('No PGDATABASE configured');
+const config = DATABASE_URL ? { connectionString: DATABASE_URL, max: 2 } : { database: PGDATABASE };
 
-console.log(`🔗 Connected to ${PGDATABASE}`);
+const db = new Pool(config);
+
+console.log(`🔗 Connected to ${PGDATABASE || 'supabase'}`);
 
 module.exports = db;

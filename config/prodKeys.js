@@ -1,4 +1,5 @@
 module.exports = {
-  PGDATABASE: process.env.PGDATABASE,
-  PORT: process.env.PORT
+  DATABASE_URL: process.env.DATABASE_URL,
+  PGDATABASE: null,
+  PORT: null
 };
