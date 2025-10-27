@@ -2,7 +2,7 @@ const { readAllArticles, readArticleById, updateVotesByArticleById } = require('
 const { readAllTopics } = require('../models/topics');
 const { AppError } = require('./errors');
 
-// @route   GET /api/articles?sortby=*&order=*
+// @route   GET /api/articles?sortby=<string>&order=<'asc', 'desc'>&topic=<string>
 // @desc    Get all articles
 exports.getAllArticles = async (req, res) => {
   let { sort_by, order, topic } = req.query;

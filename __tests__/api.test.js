@@ -126,6 +126,41 @@ describe('GET /api/articles', () => {
         })
     );
   });
+  it('200: retrieves an array of articles with a given topic when passed a valid topic as a query string', () => {
+    const validTopic = 'mitch';
+
+    return request(app)
+      .get('/api/articles')
+      .query({ topic: validTopic })
+      .expect(200)
+      .then(res => {
+        const articles = res.body.articles;
+
+        articles.forEach(({ topic }) => {
+          expect(topic).toBe(validTopic);
+        });
+      });
+  });
+  it('404: throws a 404 error when given a topic that does not exist', () => {
+    const invalidTopic = 'invalid';
+
+    return request(app)
+      .get('/api/articles')
+      .query({ topic: invalidTopic })
+      .expect(404)
+      .then(res => {
+        const error = res.body.error;
+
+        expect(error).toEqual(
+          expect.objectContaining({
+            timestamp: expect.any(String),
+            status: 404,
+            errorMessage: `No topic exists with slug '${invalidTopic}'`,
+            path: expect.any(String)
+          })
+        );
+      });
+  });
 });
 
 describe('GET /api/articles/:articleId', () => {
