@@ -1,14 +1,22 @@
 const { readAllArticles, readArticleById, updateVotesByArticleById } = require('../models/articles');
+const { readAllTopics } = require('../models/topics');
 const { AppError } = require('./errors');
 
 // @route   GET /api/articles?sortby=*&order=*
 // @desc    Get all articles
 exports.getAllArticles = async (req, res) => {
-  let { sort_by, order } = req.query;
+  let { sort_by, order, topic } = req.query;
   if (!order || !['ASC', 'DESC'].includes(order.toUpperCase())) order = 'DESC';
-  if (!sort_by || !['title', 'topic', 'author', 'created_at', 'votes'].includes(sort_by)) sort_by = 'created_at';
+  if (!sort_by || !['article_id', 'title', 'topic', 'author', 'created_at', 'votes'].includes(sort_by))
+    sort_by = 'created_at';
 
-  const articles = await readAllArticles(sort_by, order);
+  if (topic) {
+    const topics = await readAllTopics();
+    const validSlugs = topics.map(({ slug }) => slug);
+    if (!validSlugs.includes(topic)) throw new AppError(`No topic exists with slug '${topic}'`, 404, req);
+  }
+
+  const articles = await readAllArticles(sort_by, order, topic);
 
   res.status(200).send({ articles });
 };
