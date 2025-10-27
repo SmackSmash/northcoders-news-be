@@ -1,7 +1,7 @@
 const { readAllArticles, readArticleById, updateVotesByArticleById } = require('../models/articles');
 const { AppError } = require('./errors');
 
-// @route   GET /api/articles
+// @route   GET /api/articles?sortby=*&order=*
 // @desc    Get all articles
 exports.getAllArticles = async (req, res) => {
   let { sort_by, order } = req.query;
@@ -26,7 +26,7 @@ exports.getArticleById = async (req, res) => {
 
 // @route   PATCH /api/articles/:articleId
 // @desc    Increment article vote count
-exports.incrementVotesByArticleId = async (req, res) => {
+exports.addVotesByArticleId = async (req, res) => {
   const { articleId } = req.params;
 
   if (!req.body || !req.body.inc_votes) throw new AppError('Request body must have an "inc_votes" property', 400, req);
