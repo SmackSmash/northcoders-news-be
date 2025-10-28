@@ -51,7 +51,7 @@
         </p>
         <h2 id="topics">✍️ Topics</h2>
         <article>
-          <pre class="path" id="get-topics">GET /api/topics</pre>
+          <pre class="path" id="get-topics"><span class="get">GET</span> /api/topics</pre>
           <p>Returns all news topics.</p>
           <h3>Path parameters / queries</h3>
           <p>None</p>
@@ -96,7 +96,7 @@
         </article>
         <h2 id="articles">📰 Articles</h2>
         <article>
-          <pre class="path" id="get-articles">GET /api/articles</pre>
+          <pre class="path" id="get-articles"><span class="get">GET</span> /api/articles</pre>
           <p>Returns all news articles.</p>
           <h3>Path parameters / queries</h3>
           <table>
@@ -132,7 +132,7 @@
               </tr>
             </tbody>
           </table>
-          <h3>HTTP response status codes for <code>/api/topics</code></h3>
+          <h3>HTTP response status codes for <code>/api/articles</code></h3>
           <table>
             <thead>
               <tr>
@@ -521,11 +521,26 @@
           >
         </article>
         <article>
-          <pre class="path" id="get-article-id">GET /api/articles/:articleId</pre>
-          <p>Returns all ...</p>
+          <pre class="path" id="get-article-id"><span class="get">GET</span> /api/articles/:articleId</pre>
+          <p>Returns a single article</p>
           <h3>Path parameters / queries</h3>
-          <p>None</p>
-          <h3>HTTP response status codes for &nbsp;&nbsp;<code>/api/...</code></h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter/Query</th>
+                <th>Values</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>:articleId</code></td>
+                <td><code>integer</code></td>
+                <td>Article to fetch</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>HTTP response status codes for &nbsp;&nbsp;<code>/api/articles/:articleId</code></h3>
           <table>
             <thead>
               <tr>
@@ -538,21 +553,57 @@
                 <td><code>200</code></td>
                 <td>OK</td>
               </tr>
+              <tr>
+                <td><code>404</code></td>
+                <td>Article not found</td>
+              </tr>
+              <tr>
+                <td><code>400</code></td>
+                <td>Bad request</td>
+              </tr>
             </tbody>
           </table>
           <h3>Example response</h3>
           <pre>
 {
+  "article": {
+    "article_id": 1,
+    "title": "Running a Node App",
+    "topic": "coding",
+    "author": "jessjelly",
+    "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+    "created_at": "2020-11-07T06:03:00.000Z",
+    "votes": 0,
+    "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+    "comment_count": 8
+  }
 }
         </pre
           >
         </article>
         <article>
-          <pre class="path" id="patch-article-id">PATCH /api/articles/:articleId</pre>
-          <p>Returns all ...</p>
+          <pre class="path" id="patch-article-id"><span class="patch">PATCH</span> /api/articles/:articleId</pre>
+          <p>Returns article with an updated vote count</p>
           <h3>Path parameters / queries</h3>
-          <p>None</p>
-          <h3>HTTP response status codes for &nbsp;&nbsp;<code>/api/...</code></h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter/Query</th>
+                <th>Values</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>:articleId</code></td>
+                <td><code>integer</code></td>
+                <td>Article to fetch</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>Request must also contain a body with an <code>inc_votes</code> key set to an integer.</p>
+          <h3>HTTP response status codes for &nbsp;&nbsp;<code>/api/articles/:articleId</code></h3>
+          <!-- TODO: FINISH RESPONSE CODES AND REST OF ROUTES!!! -->
           <table>
             <thead>
               <tr>
@@ -570,13 +621,24 @@
           <h3>Example response</h3>
           <pre>
 {
+  "article": {
+    "article_id": 1,
+    "title": "Running a Node App",
+    "topic": "coding",
+    "author": "jessjelly",
+    "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+    "created_at": "2020-11-07T06:03:00.000Z",
+    "votes": 1,
+    "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+    "comment_count": 8
+  }
 }
         </pre
           >
         </article>
         <h2 id="users">🙋 Users</h2>
         <article>
-          <pre class="path" id="get-users">GET /api/users</pre>
+          <pre class="path" id="get-users"><span class="get">GET</span> /api/users</pre>
           <p>Returns all ...</p>
           <h3>Path parameters / queries</h3>
           <p>None</p>
@@ -605,7 +667,7 @@
         <h2 id="comments">💬 Comments</h2>
 
         <article>
-          <pre class="path" id="get-comments">GET /api/articles/:articleId/comments</pre>
+          <pre class="path" id="get-comments"><span class="get">GET</span> /api/articles/:articleId/comments</pre>
           <p>Returns all ...</p>
           <h3>Path parameters / queries</h3>
           <p>None</p>
@@ -632,7 +694,7 @@
           >
         </article>
         <article>
-          <pre class="path" id="post-comment">POST /api/articles/:articleId/comments</pre>
+          <pre class="path" id="post-comment"><span class="post">POST</span> /api/articles/:articleId/comments</pre>
           <p>Returns all ...</p>
           <h3>Path parameters / queries</h3>
           <p>None</p>
@@ -659,7 +721,7 @@
           >
         </article>
         <article>
-          <pre class="path" id="delete-comment">DELETE /api/comments/:commentId</pre>
+          <pre class="path" id="delete-comment"><span class="delete">DELETE</span> /api/comments/:commentId</pre>
           <p>Returns all ...</p>
           <h3>Path parameters / queries</h3>
           <p>None</p>

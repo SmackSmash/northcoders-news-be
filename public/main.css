@@ -116,6 +116,18 @@ main {
       &.path {
         margin-bottom: 1rem;
       }
+      .get {
+        color: #a6e3a1;
+      }
+      .post {
+        color: #89b4fa;
+      }
+      .patch {
+        color: #f9e2af;
+      }
+      .delete {
+        color: #f38ba8;
+      }
     }
     pre::-webkit-scrollbar {
       display: none;
@@ -135,12 +147,14 @@ main {
     }
     code {
       background-color: #444;
+      letter-spacing: 0;
       display: inline-block;
       padding: 0.25rem 0.375rem;
       border-radius: 0.375rem;
       font-size: 0.75rem;
-      text-transform: lowercase;
+      text-transform: none;
       font-weight: normal;
+      line-height: 0.875rem;
     }
   }
 }
