@@ -51,6 +51,46 @@
         </p>
         <h2>Topics</h2>
         <pre id="get-topics">GET /api/topics</pre>
+        <p>Returns all news topics.</p>
+        <h3>Path parameters</h3>
+        <p>None</p>
+        <h3>HTTP response status codes for /api/topics</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Status code</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>200</code></td>
+              <td>OK</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Example response</h3>
+        <pre>
+{
+  "topics": [
+    {
+      "slug": "coding",
+      "description": "Code is love, code is life",
+      "img_url": ""
+    },
+    {
+      "slug": "football",
+      "description": "FOOTIE!",
+      "img_url": "https://images.pexels.com/photos/209841/pexels-photo-209841.jpeg?w=700&h=700"
+    },
+    {
+      "slug": "cooking",
+      "description": "Hey good looking, what you got cooking?",
+      "img_url": "https://images.pexels.com/photos/33242/cooking-ingredient-cuisine-kitchen.jpg?w=700&h=700"
+    }
+  ]
+}
+        </pre>
         <h2>Articles</h2>
         <pre id="get-articles">GET /api/articles</pre>
         <pre id="get-article-id">GET /api/articles/:articleId</pre>
