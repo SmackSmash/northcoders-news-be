@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NC News API</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <header>
+      <section class="container">
+        <h1>NC News API</h1>
+        <a href="https://github.com/SmackSmash/northcoders-news-be">
+          <img src="assets/github-logo.svg" alt="Github Logo" title="View on GutHub" />
+        </a>
+      </section>
+    </header>
+    <main class="container">
+      <aside>
+        <h3>MEET NC NEWS</h3>
+        <h4>TOPICS</h4>
+        <nav>
+          <a href="#get-topics">GET /api/topics</a>
+        </nav>
+        <h4>ARTICLES</h4>
+        <nav>
+          <a href="#get-articles">GET /api/articles</a>
+          <a href="#get-article-id">GET /api/articles/:articleId</a>
+          <a href="#patch-article-id">PATCH /api/articles/:articleId</a>
+        </nav>
+        <h4>USERS</h4>
+        <nav>
+          <a href="#get-users">GET /api/users</a>
+        </nav>
+        <h4>COMMENTS</h4>
+        <nav>
+          <a href="#get-comments">GET /api/articles/:articleId/comments</a>
+          <a href="#post-comment">POST /api/articles/:articleId/comments</a>
+          <a href="#delete-comment">DELETE /api/comments/:commentId</a>
+        </nav>
+      </aside>
+      <section>
+        <h1>The News API For The 21st Century</h1>
+        <p>
+          The <strong>NC News API</strong> provides a powerful and flexible platform for accessing and managing news
+          content. It allows developers to retrieve and organize articles across various topics, manage user accounts,
+          and enable rich comment interactions. Designed for scalability and ease of integration, the API supports
+          essential operations such as creating, updating, and filtering articles by topic or author. Whether you’re
+          building a personalized news feed, an editorial dashboard, or a social discussion platform, the News API
+          offers all the tools needed to deliver dynamic, real-time news experiences.
+        </p>
+        <h2>Topics</h2>
+        <pre id="get-topics">GET /api/topics</pre>
+        <h2>Articles</h2>
+        <pre id="get-articles">GET /api/articles</pre>
+        <pre id="get-article-id">GET /api/articles/:articleId</pre>
+        <pre id="patch-article-id">PATCH /api/articles/:articleId</pre>
+        <h2>Users</h2>
+        <pre id="get-users">GET /api/users</pre>
+        <h2>Comments</h2>
+        <pre id="get-comments">GET /api/articles/:articleId/comments</pre>
+        <pre id="post-comment">POST /api/articles/:articleId/comments</pre>
+        <pre id="delete-comment">DELETE /api/comments/:commentId</pre>
+      </section>
+    </main>
+    <footer>
+      <section class="container">Copyright© 2025 NC News</section>
+    </footer>
+  </body>
+</html>

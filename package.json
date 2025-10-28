@@ -5,6 +5,7 @@
   "main": "listen.js",
   "scripts": {
     "start": "node listen.js",
+    "dev": "nodemon listen.js",
     "setup-dbs": "psql -f ./db/setup-dbs.sql",
     "seed-prod": "NODE_ENV=production npm run seed",
     "seed": "node ./db/seeds/run-seed.js",

@@ -1,17 +1,6 @@
 const { deleteCommentById, readCommentsByArticleId, createComment } = require('../models/comments');
 const { AppError } = require('./errors');
 
-// @route   DELETE /api/comments/:commentId
-// @desc    Delete comment by commentId
-exports.removeCommentById = async (req, res) => {
-  const { commentId } = req.params;
-
-  const deletedRowCount = await deleteCommentById(commentId);
-  if (deletedRowCount === 0) throw new AppError(`No comment found with id ${commentId}`, 404, req);
-
-  res.status(204).send({ comment: 'Comment deleted successfully' });
-};
-
 // @route   GET /api/articles/:articleId/comments
 // @desc    Get comments for article
 exports.getCommentsByArticleId = async (req, res) => {
@@ -34,4 +23,15 @@ exports.addComment = async (req, res) => {
   if (!addedComment) throw new AppError(`Comment was not added`, 400, req);
 
   res.status(200).send({ comment: addedComment });
+};
+
+// @route   DELETE /api/comments/:commentId
+// @desc    Delete comment by commentId
+exports.removeCommentById = async (req, res) => {
+  const { commentId } = req.params;
+
+  const deletedRowCount = await deleteCommentById(commentId);
+  if (deletedRowCount === 0) throw new AppError(`No comment found with id ${commentId}`, 404, req);
+
+  res.status(204).send({ comment: 'Comment deleted successfully' });
 };
