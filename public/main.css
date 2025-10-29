@@ -140,9 +140,13 @@ main {
       width: 100%;
       text-align: left;
       font-size: 0.875rem;
+      margin-bottom: 1rem;
 
+      th {
+        padding-bottom: 1rem;
+      }
       td {
-        padding: 1rem 0;
+        padding: 0.5rem 0;
       }
     }
     code {
