@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const { notFoundHandler, dbErrorHandler, appErrorHandler } = require('./controllers/errors');
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.use('/api', express.static('public'));
 app.use('/api/topics', require('./routes/api/topics'));
