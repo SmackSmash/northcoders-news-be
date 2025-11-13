@@ -7,7 +7,7 @@ const { AppError } = require('./errors');
 exports.getAllArticles = async (req, res) => {
   let { sort_by, order, topic } = req.query;
   if (!order || !['ASC', 'DESC'].includes(order.toUpperCase())) order = 'DESC';
-  if (!sort_by || !['article_id', 'title', 'topic', 'author', 'created_at', 'votes'].includes(sort_by))
+  if (!sort_by || !['article_id', 'title', 'topic', 'author', 'created_at', 'votes', 'comment_count'].includes(sort_by))
     sort_by = 'created_at';
 
   if (topic) {
